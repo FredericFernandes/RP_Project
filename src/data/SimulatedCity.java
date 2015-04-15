@@ -13,6 +13,13 @@ public class SimulatedCity extends City
 		this.weight = w;
 		
 	}
+	public SimulatedCity(City city, int idS, float w) 
+	{
+		super(city);
+		this.idIntoSimulation = idS;
+		this.weight = w;
+		
+	}
 	public int getIdIntoSimulation() {
 		return idIntoSimulation;
 	}

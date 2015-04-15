@@ -49,6 +49,15 @@ public City(int id, String nbDepartement, String nom, int population,
 	this.population = population;
 	this.coord = new Coordonnee(longitude, latitude);
 }
+public City(City city) 
+{
+	super();
+	this.id = city.id;
+	this.nbDepartement = city.nbDepartement;
+	this.nom = city.nom;
+	this.population = city.population;
+	this.coord = city.coord;
+}
 @Override
 public String toString() {
 	return "Ville [id=" + id + ", nbDepartement=" + nbDepartement + ", nom="

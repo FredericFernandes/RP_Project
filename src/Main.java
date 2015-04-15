@@ -1,7 +1,7 @@
-import java.util.ArrayList;
 
+ 
 import Core.Simulation;
-import Core.Storage;
+import loader.LoaderInstance;
 import loader.LoaderVilles;
 
 
@@ -10,10 +10,10 @@ public class Main {
 
 	public static void main(String[] args) 
 	{
+		String pathInstance = "inst_63_10000_1_30_0_7.flp";
 		LoaderVilles obj = new LoaderVilles();
-		System.out.println("Les villes ");
-		//System.out.println(Storage.getInstance().getHashVilles().get(50));
-		Simulation sim = new Simulation(new ArrayList<Integer>());
+		LoaderInstance loadInst = new LoaderInstance(pathInstance);
+		Simulation simul = loadInst.createSimulation();
 	}
 
 }

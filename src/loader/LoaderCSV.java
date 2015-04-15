@@ -31,7 +31,7 @@ public class LoaderCSV {
 			if (br != null) {
 				try {
 					br.close();
-					System.out.println(path+" correctly loaded !");
+					System.out.println(path+" correctly loaded.");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
