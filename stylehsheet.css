@@ -1,0 +1,21 @@
+graph {
+    fill-color: white;
+    text-background-mode: plain;
+}
+
+node {
+	text-alignment: under;
+	text-offset: 5px, 5px; 
+    size: 20px, 25px;
+    shape: diamond;
+    fill-color: gray;
+    stroke-mode: plain;
+    stroke-color: black;
+    text-background-mode: plain;
+    
+}
+edge{
+	size: 4px;
+	fill-mode: dyn-plain;
+    fill-color: green, red;
+}
