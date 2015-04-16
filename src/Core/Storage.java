@@ -1,6 +1,6 @@
 package Core;
 
-import java.util.ArrayList;
+
 import java.util.HashMap;
 
 import data.City;
@@ -12,7 +12,7 @@ public class Storage
 	private HashMap<Integer,City> hashVilles;
 	float[][] matriceWeight = null;
 	int p = 0;
-	ArrayList<SimulatedCity> listSimulatedCity = null;
+	HashMap < Integer,SimulatedCity> listSimulatedCity = null;
 	boolean isUFLP = false;
 	
 	public float[][] getMatriceWeight() {
@@ -31,11 +31,11 @@ public class Storage
 		this.p = p;
 	}
 
-	public ArrayList<SimulatedCity> getListSimulatedCity() {
+	public HashMap < Integer,SimulatedCity> getListSimulatedCity() {
 		return listSimulatedCity;
 	}
 
-	public void setListSimulatedCity(ArrayList<SimulatedCity> listSimulatedCity) {
+	public void setListSimulatedCity(HashMap < Integer,SimulatedCity> listSimulatedCity) {
 		this.listSimulatedCity = listSimulatedCity;
 	}
 

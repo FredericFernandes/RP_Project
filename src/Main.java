@@ -11,6 +11,7 @@ public class Main {
 	{
 		String pathInstance = "inst_63_10000_1_30_0_7.flp";
 		Simulation simul = LoaderSimulation.createSimulation(pathInstance);
+		simul.startSimulation();
 	}
 
 }

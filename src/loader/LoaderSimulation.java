@@ -1,6 +1,7 @@
 package loader;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import data.City;
 import data.SimulatedCity;
@@ -21,7 +22,7 @@ public class LoaderSimulation extends LoaderFile {
 		listLines.remove(listLines.size()-1); // remove -1 in end file
 		int nbCity = Integer.parseInt(listLines.get(0)[0]);
 		float[][] matriceWeight = new float[nbCity][nbCity];
-		ArrayList<SimulatedCity> listSimulatedCity = new ArrayList<SimulatedCity>();
+		HashMap < Integer,SimulatedCity> listSimulatedCity = new HashMap < Integer,SimulatedCity>();
 		int mode  = Integer.parseInt(listLines.get(0)[1]);
 		int p;
 		boolean isUFLP;
@@ -39,11 +40,11 @@ public class LoaderSimulation extends LoaderFile {
 		listLines.removeAll(listVilleInfos); // get the rest
 		for (String [] ville : listVilleInfos)
 		{
-			int id = Integer.parseInt(ville[0]);
+			int idSimulation = Integer.parseInt(ville[0]);
 			int idCity = Integer.parseInt(ville[1]);
 			float weight = Float.parseFloat(ville[2]);
-			SimulatedCity city = new SimulatedCity(Storage.getInstance().getVille(idCity), id, weight);
-			listSimulatedCity.add(city);
+			SimulatedCity city = new SimulatedCity(Storage.getInstance().getVille(idCity), idSimulation, weight);
+			listSimulatedCity.put(idSimulation, city);
 		}
 		for (String [] couts : listLines)
 		{

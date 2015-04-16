@@ -2,5 +2,25 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="src/lib/gs-algo-1.2.jar" sourcepath="src/lib/gs-algo-1.2-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/RP_Project/src/lib/gs-algo-1.2-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="src/lib/gs-core-1.2.jar" sourcepath="src/lib/gs-core-1.2-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/RP_Project/src/lib/gs-core-1.2-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="src/lib/gs-ui-1.2.jar" sourcepath="src/lib/gs-ui-1.2-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/RP_Project/src/lib/gs-ui-1.2-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="src/lib/pherd-1.0.jar" sourcepath="src/lib/pherd-1.0-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/RP_Project/src/lib/pherd-1.0-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
