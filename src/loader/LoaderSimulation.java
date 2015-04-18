@@ -76,14 +76,15 @@ public class LoaderSimulation extends LoaderFile {
 	
 	}
 	
-	public static Simulation createSimulation(String path)
+	public static Simulation createSimulation(String path, boolean chowWeight)
 	{			
 		loadVilles();
 		loadInstance(path);
 		Simulation sim = new Simulation(
 				Storage.getInstance().getListSimulatedCity(), 
 				Storage.getInstance().getMatriceWeight(), 
-				Storage.getInstance().getP() , Storage.getInstance().isUFLP());
+				Storage.getInstance().getP() , Storage.getInstance().isUFLP(),
+				chowWeight);
 		assert  sim != null ;
 		System.out.println("The simulation is successfully created. ");
 		return sim;

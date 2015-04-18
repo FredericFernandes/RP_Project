@@ -21,11 +21,12 @@ public class Simulation extends SingleGraph{
 
 	private HashMap < Integer,SimulatedCity> listSimulatedCity;
 	private float matriceWeight[][];
+	private boolean chowWeight;
 	private int matriceRes[][];
 	private int p ;
 	private boolean isUFLP;
 
-	public Simulation(HashMap<Integer, SimulatedCity> listCity , float [][] matrice, int p, boolean isUFLP) {
+	public Simulation(HashMap<Integer, SimulatedCity> listCity , float [][] matrice, int p, boolean isUFLP, boolean chowWeight) {
 		super("Simulation");
 		//this.addAttribute("ui.stylesheet","url('stylehsheet.css');");
 		this.listSimulatedCity = listCity;
@@ -34,11 +35,12 @@ public class Simulation extends SingleGraph{
 		matriceRes = new int[nbCity][nbCity];
 		this.p = p;
 		this.isUFLP = isUFLP;
+		this.chowWeight = chowWeight;
 		// For SingleGraph class
 
 		addAttribute("ui.quality");
 		addAttribute("ui.antialias");
-		
+
 		setAutoCreate(false);
 		setStrict(false);					
 	}
@@ -70,7 +72,7 @@ public class Simulation extends SingleGraph{
 			Node newNode = addNode(city.getNom());
 			//System.out.println("name : "+city.getNom());
 			newNode.addAttribute("ui.label", " id: "+String.valueOf(city.getIdIntoSimulation()+" "+city.getNom()));	
-			newNode.setAttribute("ui.style", "fill-mode: plain; size: 5px, 5px;");
+			newNode.setAttribute("ui.style", "fill-mode: plain; size: 7px, 7px;");
 			//newNode.setAttribute("ui.style", "fill-mode: plain; size: 5px, 5px;");
 			double x = city.getCoord().getLat();
 			double y = city.getCoord().getLong();
@@ -108,9 +110,12 @@ public class Simulation extends SingleGraph{
 					String name2 = listSimulatedCity.get(j).getNom();
 					//System.out.println("name1 : "+name1);
 					//System.out.println("name2 : "+name2);
-					addEdge("c_"+i+"_"+j, name1, name2);
-					//if (e != null)
-						//e.addAttribute("ui.label", "c_"+i+"_"+j);
+					Edge e = addEdge("c_"+i+"_"+j, name1, name2);
+					if (chowWeight){
+						if (e != null)
+							e.addAttribute("ui.label", "c: "+matriceWeight[i][j]);
+					}
+
 
 				}				
 			}
