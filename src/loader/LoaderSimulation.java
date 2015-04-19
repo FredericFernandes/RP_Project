@@ -84,7 +84,7 @@ public class LoaderSimulation extends LoaderFile {
 		loadInstance(path);
 		Simulation sim = new SimulationExactMethod(listSimulatedCity,matriceWeight,p,isUFLP,chowWeight);
 		assert  sim != null ;
-		System.out.println("The simulation is successfully created. ");
+		//System.out.println("The simulation is successfully created. ");
 		return sim;
 
 	}

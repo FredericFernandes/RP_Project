@@ -9,20 +9,20 @@ import java.util.ArrayList;
 
 public class MyGlpk 
 {
-	private int solution;
-	private ArrayList<Integer> list_Solutions;
-
+	private float valFctObj;
+	private float[] solution;
 
 	public MyGlpk(StringBuffer configPl) {
 		super();
-		solution = -1;
-		list_Solutions = new ArrayList<Integer>();
+		valFctObj = -1;
+		
+		
 		start(configPl);
 	}
 
 	/******************************/
 	/* LECTURE D'UN  ENTIER DANS UN FICHIER */
-	private int lit_entier(BufferedReader fe){
+	private float lit_entier(BufferedReader fe){
 		char[] ch=new char[1];
 		String s="";
 		try{
@@ -36,7 +36,7 @@ public class MyGlpk
 			}	
 		}catch(IOException e){System.err.println("Probleme de lecture dans out.txt");}
 
-		return Integer.parseInt(s);
+		return Float.parseFloat(s);
 	}
 
 	/**************************************/
@@ -56,7 +56,7 @@ public class MyGlpk
 	/* LIT LE FICHIER DE SORTIE*/
 	private void lit_sortie()
 	{
-		if (solution == -1)
+		if (valFctObj == -1)
 		{
 			BufferedReader out=null;
 			try{
@@ -72,14 +72,16 @@ public class MyGlpk
 			{
 				avance_jusqu_a(out,':');
 			}
-			int nbVarialbe =lit_entier(out);
+			float nbVarialbe =lit_entier(out);
+			System.out.println("nbVarialbe :"+nbVarialbe);
+			solution = new float[(int) nbVarialbe];
 			avance_jusqu_a(out,'=');
-			solution=lit_entier(out);
+			valFctObj=lit_entier(out);
 			for(int i=0;i<nbVarialbe;i++)
 			{
 				avance_jusqu_a(out,'*');
-				int res = lit_entier(out);
-				list_Solutions.add(res);
+				float res = lit_entier(out);
+				solution[i]=res;
 			}
 
 			try {
@@ -131,15 +133,15 @@ public class MyGlpk
 			System.err.println("Probleme de lecture de out.txt");
 		}
 	}
-	public int getResFctObjectif()
+	public Float getResFctObjectif()
+	{
+		lit_sortie();
+		return valFctObj;
+	}
+	public float[] getSolutions()
 	{
 		lit_sortie();
 		return solution;
-	}
-	public ArrayList<Integer> getSolutions()
-	{
-		lit_sortie();
-		return list_Solutions;
 	}
 
 

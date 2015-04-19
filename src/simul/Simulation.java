@@ -23,13 +23,13 @@ public abstract class Simulation {
 
 	protected HashMap < Integer,SimulatedCity> listSimulatedCity;
 	protected float matriceWeight[][];
-	protected boolean chowWeight;
+	protected boolean chowRoad;
 	protected int matriceRes[][];
 	protected int p ; // -1 if not used for UFLP mode
 	protected boolean isUFLP;
 	protected int nbCity;
 
-	public Simulation(HashMap<Integer, SimulatedCity> listCity , float [][] matrice, int p, boolean isUFLP,boolean chowWeight) {
+	public Simulation(HashMap<Integer, SimulatedCity> listCity , float [][] matrice, int p, boolean isUFLP,boolean chowRoad) {
 		//this.addAttribute("ui.stylesheet","url('stylehsheet.css');");
 		this.listSimulatedCity = listCity;
 		matriceWeight = matrice;
@@ -37,10 +37,9 @@ public abstract class Simulation {
 		matriceRes = new int[nbCity][nbCity];
 		this.p = p;
 		this.isUFLP = isUFLP;
-		this.chowWeight = chowWeight;
+		this.chowRoad = chowRoad;
 		
-		
-						
+							
 	}
 	 public void startSimulation(){
 		 /*
@@ -48,11 +47,11 @@ public abstract class Simulation {
 		  */
 		 
 		 
-		 showResul();
+		 showWindow();
 	 }
 	 
-	 private void showResul(){
-		new Window(listSimulatedCity, matriceWeight, chowWeight);
+	 protected void showWindow(){
+		new Window(listSimulatedCity, matriceWeight, chowRoad,matriceRes);
 	 }
 	
 

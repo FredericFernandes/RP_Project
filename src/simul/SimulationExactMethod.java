@@ -1,11 +1,12 @@
 package simul;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
 import Core.MyGlpk;
 import Core.SimulatedCity;
-
+import java.util.Arrays;
 public class SimulationExactMethod extends Simulation {
 
 	private MyGlpk pl;
@@ -13,20 +14,12 @@ public class SimulationExactMethod extends Simulation {
 			HashMap<Integer, SimulatedCity> listCity,float[][] matrice, int p, boolean isUFLP, boolean chowWeight) 
 	{
 		super(listCity, matrice, p, isUFLP, chowWeight);
-		pl = new MyGlpk(createPl());
-		pl.printBrutResult();
-	}
 
+	}
 	private  StringBuffer createPl()
 	{
 		StringBuffer  buffer = new StringBuffer();
 
-		Random randomGenerator = new Random();
-		int[] nb_min_employ =new  int[10];
-		for (int i=0;i<10;i++){
-			//nb_min_employ[i]= Integer.parseInt(in.readLine());
-			nb_min_employ[i]= randomGenerator.nextInt(10);
-		}
 		buffer.append("Minimize ");
 		// sum FiYi
 		for (int i = 0 ; i < nbCity ; i++)
@@ -40,10 +33,12 @@ public class SimulationExactMethod extends Simulation {
 		for (int i = 0 ; i < nbCity ; i ++){
 			for (int j = 0 ; j < nbCity ; j ++){
 				if (i!=j){
-					String cij = String.valueOf(matriceWeight[i][j]);
-					String sI = String.valueOf(i);
-					String sJ = String.valueOf(j);
-					buffer.append(cij+"x"+sI+sJ+"+");
+					if(matriceWeight[i][j]!=0){
+						String cij = String.valueOf(matriceWeight[i][j]);
+						String sI = String.valueOf(i);
+						String sJ = String.valueOf(j);
+						buffer.append(cij+"x"+"("+sI+"#"+sJ+")"+"+");
+					}	
 				}	
 			}
 		}
@@ -55,10 +50,11 @@ public class SimulationExactMethod extends Simulation {
 		for (int i = 0 ; i < nbCity ; i ++){
 			for (int j = 0 ; j < nbCity ; j ++){
 				if (i!=j){
-					String sI = String.valueOf(i);
-					String sJ = String.valueOf(j);
-					//buffer.append("x"+sI+sJ+"<="+"y"+sI+"\n"); // sij <= yi
-					buffer.append("y"+sI+"-"+"x"+sI+sJ+">=0\n");   // yi - xij >=0
+					if(matriceWeight[i][j]!=0){
+						String sI = String.valueOf(i);
+						String sJ = String.valueOf(j);
+						buffer.append("y"+sI+"-"+"x"+"("+sI+"#"+sJ+")"+">=0\n");   // yi - xij >=0
+					}	
 				}
 			}		
 		}
@@ -68,8 +64,10 @@ public class SimulationExactMethod extends Simulation {
 			buffer.append("y"+sJ+"+");
 			for (int i = 0 ; i < nbCity ; i ++){
 				if (i!=j){
-					String sI = String.valueOf(i);
-					buffer.append("x"+sI+sJ+"+");
+					if(matriceWeight[i][j]!=0){
+						String sI = String.valueOf(i);
+						buffer.append("x"+"("+sI+"#"+sJ+")"+"+");
+					}		
 				}
 			}
 			buffer.deleteCharAt(buffer.length() - 1); // remove "+" in too 
@@ -86,13 +84,15 @@ public class SimulationExactMethod extends Simulation {
 		for (int i = 0 ; i < nbCity ; i ++){
 			for (int j = 0 ; j < nbCity ; j ++){
 				if (i!=j){
-					String sI = String.valueOf(i);
-					String sJ = String.valueOf(j);
-					buffer.append("x"+sI+sJ+">=0\n");	
+					if(matriceWeight[i][j]!=0){
+						String sI = String.valueOf(i);
+						String sJ = String.valueOf(j);
+						buffer.append("x"+"("+sI+"#"+sJ+")"+">=0\n");	
+					}			
 				}
 			}
 		}
-	
+
 		buffer.append("Integers\n");
 		// yi entiers
 		for (int i = 0 ; i < nbCity ; i ++){
@@ -103,9 +103,11 @@ public class SimulationExactMethod extends Simulation {
 		for (int i = 0 ; i < nbCity ; i ++){
 			for (int j = 0 ; j < nbCity ; j ++){
 				if (i!=j){
-					String sI = String.valueOf(i);
-					String sJ = String.valueOf(j);
-					buffer.append("x"+sI+sJ+" ");	
+					if(matriceWeight[i][j]!=0){
+						String sI = String.valueOf(i);
+						String sJ = String.valueOf(j);
+						buffer.append("x"+"("+sI+"#"+sJ+")"+" ");	
+					}	
 				}
 			}
 		}
@@ -114,5 +116,59 @@ public class SimulationExactMethod extends Simulation {
 		buffer.append("\nEnd\n");
 
 		return buffer;
+	}
+
+	public void startSimulation(){
+		pl = new MyGlpk(createPl());
+		//pl.printBrutResult();
+		construcResult();
+		showWindow();
+	}
+	private void construcResult(){
+		float resFctObj = pl.getResFctObjectif();
+		System.out.println("Solution : "+resFctObj);
+		
+		float[] res = pl.getSolutions();		
+		// get yi
+		for (int i = 0 ; i < nbCity ; i++){
+			matriceRes[i][i]=(int) res[i];
+		}
+
+		int index = nbCity;
+		for (int i = 0 ; i < nbCity; i++){
+			for (int j = 0 ; j < nbCity; j++){
+				if(i!=j){	
+					if(matriceWeight[i][j]!=0){
+						matriceRes[i][j]=(int) res[index];
+						index++;
+					}			
+				}
+			}
+		}
+		//printMatr(matriceRes);
+	}
+
+	private void printMatr(int[][] matr){
+		System.out.println("matriceRes :\n");
+		System.out.print("  |");
+		for (int i =0 ; i < nbCity ; i++){
+			System.out.print(" V"+i+"|");}
+		System.out.print("\n");
+		System.out.print("--+");
+		for (int i =0 ; i < nbCity ; i++){
+			System.out.print("---+");}
+		
+		
+		System.out.print("\n");
+		for (int i = 0 ; i < nbCity ; i++){
+			System.out.print("V"+i+"|");
+			for (int j = 0 ; j < nbCity ; j++){
+				System.out.print(" "+matr[i][j]+" |");}
+			System.out.print("\n");
+			System.out.print("--+");
+			for (int cpt =0 ; cpt < nbCity ; cpt++){
+				System.out.print("---+");}
+			System.out.print("\n");
+		}
 	}
 }

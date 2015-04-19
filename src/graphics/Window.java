@@ -18,7 +18,7 @@ import Core.StorageAllCity;
 
 public class Window extends SingleGraph{
 
-	public Window(HashMap<Integer, SimulatedCity> listSimulatedCity, float[][] matriceWeight, boolean chowWeight) {
+	public Window(HashMap<Integer, SimulatedCity> listSimulatedCity, float[][] matriceWeight, boolean chowRoad, int[][] matriceRes) {
 		super("Simulation");
 
 		addAttribute("ui.quality");
@@ -36,17 +36,54 @@ public class Window extends SingleGraph{
 		frame.setSize(600, 400);
 		frame.setContentPane(defaultView);
 		frame.setVisible(true);	
- 
+
 		//drowFrance();
 		drowSimulatedCity(listSimulatedCity);
-		drowRoad(matriceWeight, listSimulatedCity, chowWeight);
-		
+		if(chowRoad)
+			drowRoad(matriceWeight, listSimulatedCity);
+
+		drowResult(matriceRes,listSimulatedCity);
 		//Camera cam = defaultView.getCamera();
 		//cam.setViewCenter(3,45,0);
 		//cam.setViewPercent(0.01);
 
 	}
-	
+
+	private void drowResult(int[][] matriceRes, HashMap<Integer,SimulatedCity> listSimulatedCity) 
+	{
+		// drow for city
+		for(int i =0 ; i< matriceRes.length ; i++){
+			if(matriceRes[i][i]!=0){		
+				String id = String.valueOf(listSimulatedCity.get(i).getIdIntoSimulation());
+				Node n = getNode(id);
+				n.addAttribute("ui.style", "fill-color: green;");
+			}
+		}
+
+		// drow for Road
+		for(int i =0 ; i< matriceRes.length ; i++){
+			for(int j =0 ; j< matriceRes.length ; j++){
+				if(i!=j){
+					if(matriceRes[i][j]!=0){
+						String id1 = String.valueOf(listSimulatedCity.get(i).getIdIntoSimulation());
+						String id2 = String.valueOf(listSimulatedCity.get(j).getIdIntoSimulation());
+						Edge e = null;
+						e = getEdge("c_"+id1+"_"+id2);
+						if(e==null)
+							e = getEdge("c_"+id2+"_"+id1);
+						if(e==null){
+							e = addEdge("c_"+id1+"_"+id2, id1, id2);
+						}
+						e.setAttribute("ui.style", "size: 1px, 1px;");
+						e.addAttribute("ui.style", "fill-color: green;");
+
+					}
+				}
+			}
+		}
+
+	}
+
 	private void drowFrance(){// print The "France" 
 		for (City city : StorageAllCity.getInstance().getHashVilles().values()){
 			Node newNode = addNode(city.getNom());
@@ -58,34 +95,37 @@ public class Window extends SingleGraph{
 			newNode.setAttribute("xyz", x, y, 0);
 		}
 	}
-	
+
 	private void drowSimulatedCity(HashMap < Integer,SimulatedCity> listSimulatedCity){
 		for (SimulatedCity city : listSimulatedCity.values()){
 			//System.out.println("ajout de "+id_Case);
-			Node newNode = addNode(city.getNom());
+			Node newNode = addNode(String.valueOf(city.getIdIntoSimulation()));
 			//System.out.println("name : "+city.getNom());
 			newNode.addAttribute("ui.label", " id: "+String.valueOf(city.getIdIntoSimulation()+" "+city.getNom()));	
-			newNode.setAttribute("ui.style", "fill-mode: plain; size: 7px, 7px;");
+			newNode.setAttribute("ui.style", "fill-mode: plain; size: 5px, 5px;");
 			//newNode.setAttribute("ui.style", "fill-mode: plain; size: 5px, 5px;");
 			double x = city.getCoord().getLat();
 			double y = city.getCoord().getLong();
 			newNode.setAttribute("xyz", x, y, 0);
 		}
 	}
-	private void drowRoad(float [][] matriceWeight, HashMap < Integer,SimulatedCity> listSimulatedCity, boolean chowWeight){
+	private void drowRoad(float [][] matriceWeight, HashMap < Integer,SimulatedCity> listSimulatedCity){
 		for (int i =0 ; i < matriceWeight.length ; i ++){
 			for (int j =0 ; j < matriceWeight.length ; j ++){
 				if (matriceWeight[i][j] != 0){
 					//System.out.println("\n");
-					String name1 = listSimulatedCity.get(i).getNom();
-					String name2 = listSimulatedCity.get(j).getNom();
+					String id1 = String.valueOf(listSimulatedCity.get(i).getIdIntoSimulation());
+					String id2 = String.valueOf(listSimulatedCity.get(j).getIdIntoSimulation());
 					//System.out.println("name1 : "+name1);
 					//System.out.println("name2 : "+name2);
-					Edge e = addEdge("c_"+i+"_"+j, name1, name2);
-					if (chowWeight){
-						if (e != null)
-							e.addAttribute("ui.label", "c: "+matriceWeight[i][j]);
+					Edge e = addEdge("c_"+id1+"_"+id2, id1, id2);
+					if (e != null){
+						//e.addAttribute("ui.label", "c: "+matriceWeight[i][j]);
+						//e.addAttribute("ui.label","c_"+id1+"_"+id2);
+						e.setAttribute("ui.style", "size: 0.1px, 0.1px;");
 					}
+
+
 				}				
 			}
 		}

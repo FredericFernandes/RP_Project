@@ -13,9 +13,12 @@ public class Main {
 
 	public static void main(String[] args) 
 	{
-		String pathInstance = "inst_63_10000_1_30_0_7.flp";
-		boolean chowWeight =false;
-		Simulation simul = LoaderSimulation.createSimulationExactMethod(pathInstance,chowWeight);
+		//String pathInstance = "inst_63_10000_1_30_0_7.flp";  // 10 cities
+		//String pathInstance ="inst_77_5000_1_30_0_7.flp"; // 58 cities
+		String pathInstance ="inst_77_0_1_50_0_7.flp"; // 514 cities
+		
+		boolean chowRoad =false;
+		Simulation simul = LoaderSimulation.createSimulationExactMethod(pathInstance,chowRoad);
 		simul.startSimulation();
 
 		
