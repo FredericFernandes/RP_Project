@@ -3,29 +3,30 @@ package loader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import data.City;
-import data.SimulatedCity;
+import simul.Simulation;
+import simul.SimulationExactMethod;
 
-import Core.Simulation;
-import Core.Storage;
+
+import Core.City;
+import Core.SimulatedCity;
+import Core.StorageAllCity;
 
 
 public class LoaderSimulation extends LoaderFile {
 
-	//ArrayList<SimulatedCity> listSimulatedCity;
-	//float matriceWeight[][];
-	//int p;
-	//boolean isUFLP;
+	private static HashMap < Integer,SimulatedCity> listSimulatedCity;
+	private static float matriceWeight[][];
+	private static int p;
+	private static boolean isUFLP;
 	private static void loadInstance(String path) 
 	{
 		ArrayList<String[]> listLines = loadFile(path);
 		listLines.remove(listLines.size()-1); // remove -1 in end file
 		int nbCity = Integer.parseInt(listLines.get(0)[0]);
-		float[][] matriceWeight = new float[nbCity][nbCity];
-		HashMap < Integer,SimulatedCity> listSimulatedCity = new HashMap < Integer,SimulatedCity>();
+		
+		matriceWeight = new float[nbCity][nbCity];
+		listSimulatedCity = new HashMap < Integer,SimulatedCity>();
 		int mode  = Integer.parseInt(listLines.get(0)[1]);
-		int p;
-		boolean isUFLP;
 		if (mode != -1){
 			// mode  p-median
 			p = mode;
@@ -43,7 +44,7 @@ public class LoaderSimulation extends LoaderFile {
 			int idSimulation = Integer.parseInt(ville[0]);
 			int idCity = Integer.parseInt(ville[1]);
 			float weight = Float.parseFloat(ville[2]);
-			SimulatedCity city = new SimulatedCity(Storage.getInstance().getVille(idCity), idSimulation, weight);
+			SimulatedCity city = new SimulatedCity(StorageAllCity.getInstance().getVille(idCity), idSimulation, weight);
 			listSimulatedCity.put(idSimulation, city);
 		}
 		for (String [] couts : listLines)
@@ -53,12 +54,13 @@ public class LoaderSimulation extends LoaderFile {
 			float weight = Float.parseFloat(couts[2]);
 			matriceWeight[id1][id2] = weight;
 		}
-		Storage.getInstance().setListSimulatedCity(listSimulatedCity);
-		Storage.getInstance().setMatriceWeight(matriceWeight);
-		Storage.getInstance().setP(p);
-		Storage.getInstance().setUFLP(isUFLP);
+
+		//Storage.getInstance().setListSimulatedCity(listSimulatedCity);
+		//Storage.getInstance().setMatriceWeight(matriceWeight);
+		//Storage.getInstance().setP(p);
+		//Storage.getInstance().setUFLP(isUFLP);
 	}
-	
+
 	private static void loadVilles() 
 	{
 		String csvFile = "villes_france.csv";
@@ -71,24 +73,20 @@ public class LoaderSimulation extends LoaderFile {
 			double longitude = Double.parseDouble(ville[4]);
 			double latitude = Double.parseDouble(ville[5]);
 			City newVille = new City(id, nbDepartement, nom, population, longitude, latitude);
-			Storage.getInstance().addVille(newVille);
+			StorageAllCity.getInstance().addVille(newVille);
 		}
-	
+
 	}
-	
-	public static Simulation createSimulation(String path, boolean chowWeight)
+
+	public static Simulation createSimulationExactMethod(String path, boolean chowWeight)
 	{			
 		loadVilles();
 		loadInstance(path);
-		Simulation sim = new Simulation(
-				Storage.getInstance().getListSimulatedCity(), 
-				Storage.getInstance().getMatriceWeight(), 
-				Storage.getInstance().getP() , Storage.getInstance().isUFLP(),
-				chowWeight);
+		Simulation sim = new SimulationExactMethod(listSimulatedCity,matriceWeight,p,isUFLP,chowWeight);
 		assert  sim != null ;
 		System.out.println("The simulation is successfully created. ");
 		return sim;
-				
+
 	}
 
 

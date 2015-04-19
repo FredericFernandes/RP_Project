@@ -2,8 +2,9 @@
 
 import java.util.Random;
 
+import simul.Simulation;
+
 import Core.MyGlpk;
-import Core.Simulation;
 import loader.LoaderSimulation;
 
 
@@ -14,17 +15,17 @@ public class Main {
 	{
 		String pathInstance = "inst_63_10000_1_30_0_7.flp";
 		boolean chowWeight =false;
-		Simulation simul = LoaderSimulation.createSimulation(pathInstance,chowWeight);
+		Simulation simul = LoaderSimulation.createSimulationExactMethod(pathInstance,chowWeight);
 		simul.startSimulation();
 
 		
-		MyGlpk glpk = new MyGlpk(creteTestPl());
-		glpk.printBrutResult(); // affiche tout le fichier out
-		System.out.println("Solution : "+glpk.getResFctObjectif());
-		System.out.println("Varialbes :"+glpk.getSolutions());
+		//MyGlpk glpk = new MyGlpk(createTestPl());
+		//glpk.printBrutResult(); // affiche tout le fichier out
+		//System.out.println("Solution : "+glpk.getResFctObjectif());
+		//System.out.println("Varialbes :"+glpk.getSolutions());
 	}
 
-	private static StringBuffer creteTestPl()
+	private static StringBuffer createTestPl()
 	{
 		StringBuffer  buffer = new StringBuffer();
 		Random randomGenerator = new Random();
