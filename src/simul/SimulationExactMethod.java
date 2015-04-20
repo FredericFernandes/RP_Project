@@ -1,12 +1,9 @@
 package simul;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 
 import Core.MyGlpk;
 import Core.SimulatedCity;
-import java.util.Arrays;
 public class SimulationExactMethod extends Simulation {
 
 	private MyGlpk pl;
@@ -117,12 +114,12 @@ public class SimulationExactMethod extends Simulation {
 
 		return buffer;
 	}
-
+	
+	@Override
 	public void startSimulation(){
 		pl = new MyGlpk(createPl());
 		//pl.printBrutResult();
 		construcResult();
-		showWindow();
 	}
 	private void construcResult(){
 		float resFctObj = pl.getResFctObjectif();
@@ -131,7 +128,7 @@ public class SimulationExactMethod extends Simulation {
 		float[] res = pl.getSolutions();		
 		// get yi
 		for (int i = 0 ; i < nbCity ; i++){
-			matriceRes[i][i]=(int) res[i];
+			matriceRes[i][i]= res[i];
 		}
 
 		int index = nbCity;
@@ -139,36 +136,14 @@ public class SimulationExactMethod extends Simulation {
 			for (int j = 0 ; j < nbCity; j++){
 				if(i!=j){	
 					if(matriceWeight[i][j]!=0){
-						matriceRes[i][j]=(int) res[index];
+						matriceRes[i][j]=res[index];
 						index++;
 					}			
 				}
 			}
 		}
-		//printMatr(matriceRes);
+		//printMatrice(matriceRes);
+		//printMatrice(matriceWeight);
 	}
 
-	private void printMatr(int[][] matr){
-		System.out.println("matriceRes :\n");
-		System.out.print("  |");
-		for (int i =0 ; i < nbCity ; i++){
-			System.out.print(" V"+i+"|");}
-		System.out.print("\n");
-		System.out.print("--+");
-		for (int i =0 ; i < nbCity ; i++){
-			System.out.print("---+");}
-		
-		
-		System.out.print("\n");
-		for (int i = 0 ; i < nbCity ; i++){
-			System.out.print("V"+i+"|");
-			for (int j = 0 ; j < nbCity ; j++){
-				System.out.print(" "+matr[i][j]+" |");}
-			System.out.print("\n");
-			System.out.print("--+");
-			for (int cpt =0 ; cpt < nbCity ; cpt++){
-				System.out.print("---+");}
-			System.out.print("\n");
-		}
-	}
 }

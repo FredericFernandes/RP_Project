@@ -5,7 +5,7 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
+
 
 public class MyGlpk 
 {
@@ -15,8 +15,8 @@ public class MyGlpk
 	public MyGlpk(StringBuffer configPl) {
 		super();
 		valFctObj = -1;
-		
-		
+
+
 		start(configPl);
 	}
 
@@ -30,12 +30,11 @@ public class MyGlpk
 			while (ch[0]==' '){
 				fe.read(ch);
 			}
-			while (ch[0]!=' ') {
+			while ((ch[0]!=' ')&&ch[0]!='\n') {
 				s=s+ch[0];
 				fe.read(ch);
 			}	
 		}catch(IOException e){System.err.println("Probleme de lecture dans out.txt");}
-
 		return Float.parseFloat(s);
 	}
 
@@ -68,8 +67,7 @@ public class MyGlpk
 			}
 
 			//Récup le nombre de varialbe
-			for (int i=0;i<3;i++)
-			{
+			for (int i=0;i<3;i++){
 				avance_jusqu_a(out,':');
 			}
 			float nbVarialbe =lit_entier(out);
@@ -77,10 +75,9 @@ public class MyGlpk
 			solution = new float[(int) nbVarialbe];
 			avance_jusqu_a(out,'=');
 			valFctObj=lit_entier(out);
-			for(int i=0;i<nbVarialbe;i++)
-			{
-				avance_jusqu_a(out,'*');
-				float res = lit_entier(out);
+			goToStartRes(out);
+			for(int i=0;i<nbVarialbe;i++){
+				float res = readVal(out);
 				solution[i]=res;
 			}
 
@@ -91,7 +88,22 @@ public class MyGlpk
 		}
 
 	}
+	private void goToStartRes(BufferedReader fe){	
+		avance_jusqu_a(fe,'-');
+		avance_jusqu_a(fe,'\n');
+		avance_jusqu_a(fe,'-');
+		avance_jusqu_a(fe,'\n');
+	}
+	private float readVal(BufferedReader fe){
+		String line =null;
+		try {
+			 line = fe.readLine();
+		} catch (IOException e1) {e1.printStackTrace();}
+		String[] tmp = line.split("( )+");
+		float val = Float.valueOf(tmp[4]);
+		return val;
 
+	}
 	private void start(StringBuffer configPl)
 	{
 		try {

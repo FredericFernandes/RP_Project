@@ -18,7 +18,7 @@ import Core.StorageAllCity;
 
 public class Window extends SingleGraph{
 
-	public Window(HashMap<Integer, SimulatedCity> listSimulatedCity, float[][] matriceWeight, boolean chowRoad, int[][] matriceRes) {
+	public Window(HashMap<Integer, SimulatedCity> listSimulatedCity, float[][] matriceWeight, boolean chowRoad, float[][] matriceRes) {
 		super("Simulation");
 
 		addAttribute("ui.quality");
@@ -49,7 +49,7 @@ public class Window extends SingleGraph{
 
 	}
 
-	private void drowResult(int[][] matriceRes, HashMap<Integer,SimulatedCity> listSimulatedCity) 
+	private void drowResult(float[][] matriceRes, HashMap<Integer,SimulatedCity> listSimulatedCity) 
 	{
 		// drow for city
 		for(int i =0 ; i< matriceRes.length ; i++){

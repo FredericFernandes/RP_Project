@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import simul.Simulation;
+import simul.SimulationArrondiMethod;
 import simul.SimulationExactMethod;
 
 
@@ -83,6 +84,16 @@ public class LoaderSimulation extends LoaderFile {
 		loadVilles();
 		loadInstance(path);
 		Simulation sim = new SimulationExactMethod(listSimulatedCity,matriceWeight,p,isUFLP,chowWeight);
+		assert  sim != null ;
+		//System.out.println("The simulation is successfully created. ");
+		return sim;
+
+	}
+	public static Simulation createSimulationArrondiMethod(String path, boolean chowWeight)
+	{			
+		loadVilles();
+		loadInstance(path);
+		Simulation sim = new SimulationArrondiMethod(listSimulatedCity,matriceWeight,p,isUFLP,chowWeight);
 		assert  sim != null ;
 		//System.out.println("The simulation is successfully created. ");
 		return sim;
