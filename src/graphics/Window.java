@@ -56,7 +56,8 @@ public class Window extends SingleGraph{
 			if(matriceRes[i][i]!=0){		
 				String id = String.valueOf(listSimulatedCity.get(i).getIdIntoSimulation());
 				Node n = getNode(id);
-				n.addAttribute("ui.style", "fill-color: green;");
+				n.addAttribute("ui.style", "size: 7px, 7px; fill-color: green;");
+				//n.setAttribute("ui.style", "size: 5px, 5px;");
 			}
 		}
 
@@ -122,7 +123,7 @@ public class Window extends SingleGraph{
 					if (e != null){
 						//e.addAttribute("ui.label", "c: "+matriceWeight[i][j]);
 						//e.addAttribute("ui.label","c_"+id1+"_"+id2);
-						e.setAttribute("ui.style", "size: 0.1px, 0.1px;");
+						e.setAttribute("ui.style", "size: 0.2px, 0.2px;");
 					}
 
 

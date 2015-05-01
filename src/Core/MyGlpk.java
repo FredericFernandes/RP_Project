@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 
 
 public class MyGlpk 
@@ -50,7 +51,17 @@ public class MyGlpk
 			fe.read(ch); //dernier espace apres =
 		}catch(IOException e){System.err.println("Probleme de lecture dans out.txt");}
 	}
-
+	
+	private void avance_jusqu_a(BufferedReader fe, String match){
+		int size = match.length();
+		char[] string = new char[size];
+		try{		
+			fe.read(string,0,size);			
+			while(!(new String(string)).equals(match)){	
+				fe.read(string,0,size);			
+			}
+		}catch(IOException e){System.err.println("Probleme de lecture dans out.txt");}
+	}
 	/************************************/
 	/* LIT LE FICHIER DE SORTIE*/
 	private void lit_sortie()
@@ -71,16 +82,17 @@ public class MyGlpk
 				avance_jusqu_a(out,':');
 			}
 			float nbVarialbe =lit_entier(out);
-			System.out.println("nbVarialbe :"+nbVarialbe);
+			//System.out.println("nbVarialbe :"+nbVarialbe);
 			solution = new float[(int) nbVarialbe];
 			avance_jusqu_a(out,'=');
 			valFctObj=lit_entier(out);
 			goToStartRes(out);
 			for(int i=0;i<nbVarialbe;i++){
+				//System.out.println("i: "+0);
 				float res = readVal(out);
 				solution[i]=res;
 			}
-
+			
 			try {
 				if(out != null)
 					out.close();
@@ -89,18 +101,23 @@ public class MyGlpk
 
 	}
 	private void goToStartRes(BufferedReader fe){	
-		avance_jusqu_a(fe,'-');
+		//avance_jusqu_a(fe,'-');
+		avance_jusqu_a(fe,"--");
 		avance_jusqu_a(fe,'\n');
-		avance_jusqu_a(fe,'-');
+		avance_jusqu_a(fe,"--");
 		avance_jusqu_a(fe,'\n');
 	}
 	private float readVal(BufferedReader fe){
 		String line =null;
 		try {
 			 line = fe.readLine();
+			//System.out.println("line : "+line);
 		} catch (IOException e1) {e1.printStackTrace();}
 		String[] tmp = line.split("( )+");
+		//System.out.println(tmp[1]);
+		//System.out.println("len : "+tmp.length);
 		float val = Float.valueOf(tmp[4]);
+		
 		return val;
 
 	}

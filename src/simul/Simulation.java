@@ -25,6 +25,7 @@ public abstract class Simulation {
 	protected float matriceWeight[][];
 	protected boolean chowRoad;
 	protected float matriceRes[][];
+	protected float resFctObj;
 	protected int p ; // -1 if not used for UFLP mode
 	protected boolean isUFLP;
 	protected int nbCity;
@@ -38,41 +39,47 @@ public abstract class Simulation {
 		this.p = p;
 		this.isUFLP = isUFLP;
 		this.chowRoad = chowRoad;
-		
-							
+
+
 	}
-	 public abstract void startSimulation();
-	 public void showResult(){
-		 showWindow();
-	 }
-	 
-	 private void showWindow(){
+
+	public abstract void startSimulation();
+
+	protected abstract void construcResult();
+
+	public void showResult(){
+		
+		construcResult();
+		showWindow();
+	}
+
+	private void showWindow(){
 		new Window(listSimulatedCity, matriceWeight, chowRoad,matriceRes);
-	 }
-	
-	 protected void printMatrice(float[][] matr)
-	 {
-			System.out.println("matriceRes :\n");
-			System.out.print("  |");
-			for (int i =0 ; i < nbCity ; i++){
-				System.out.print(" V"+i+"|");}
+	}
+
+	protected void printMatrice()
+	{
+		System.out.println("matriceRes :\n");
+		System.out.print("   | ");
+		for (int i =0 ; i < nbCity ; i++){
+			System.out.print(" V"+i+" | ");}
+		System.out.print("\n");
+		System.out.print("---+");
+		for (int i =0 ; i < nbCity ; i++){
+			System.out.print("-----+");}
+
+
+		System.out.print("\n");
+		for (int i = 0 ; i < nbCity ; i++){
+			System.out.print("V"+i+" |");
+			for (int j = 0 ; j < nbCity ; j++){
+				System.out.print(" "+matriceRes[i][j]+" |");}
 			System.out.print("\n");
-			System.out.print("--+");
-			for (int i =0 ; i < nbCity ; i++){
-				System.out.print("---+");}
-			
-			
+			System.out.print("---+");
+			for (int cpt =0 ; cpt < nbCity ; cpt++){
+				System.out.print("-----+");}
 			System.out.print("\n");
-			for (int i = 0 ; i < nbCity ; i++){
-				System.out.print("V"+i+"|");
-				for (int j = 0 ; j < nbCity ; j++){
-					System.out.print(" "+matr[i][j]+" |");}
-				System.out.print("\n");
-				System.out.print("--+");
-				for (int cpt =0 ; cpt < nbCity ; cpt++){
-					System.out.print("---+");}
-				System.out.print("\n");
-			}
 		}
-	 
+	}
+
 }

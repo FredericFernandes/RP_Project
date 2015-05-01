@@ -13,19 +13,22 @@ public class SimulationExactMethod extends Simulation {
 		super(listCity, matrice, p, isUFLP, chowWeight);
 
 	}
-	private  StringBuffer createPl()
+	private  StringBuffer createP()
 	{
 		StringBuffer  buffer = new StringBuffer();
 
 		buffer.append("Minimize ");
-		// sum FiYi
-		for (int i = 0 ; i < nbCity ; i++)
-		{
-			SimulatedCity city = listSimulatedCity.get(i);
-			String w = String.valueOf(city.getWeight());
-			String id = String.valueOf(city.getIdIntoSimulation());
-			buffer.append(w+"y"+id+"+");
+		if(isUFLP){
+			// sum FiYi
+			for (int i = 0 ; i < nbCity ; i++){
+				SimulatedCity city = listSimulatedCity.get(i);
+				String w = String.valueOf(city.getWeight());
+				//String id = String.valueOf(city.getIdIntoSimulation());
+				String sI = String.valueOf(i);
+				buffer.append(w+"y"+sI+"+");
+			}
 		}
+
 
 		for (int i = 0 ; i < nbCity ; i ++){
 			for (int j = 0 ; j < nbCity ; j ++){
@@ -43,6 +46,16 @@ public class SimulationExactMethod extends Simulation {
 
 		buffer.append("\n\nSubject to\n\n");
 
+		if(!isUFLP){// contraint for p-median problem
+			// sum of yj = p
+			for (int i = 0 ; i < nbCity ; i++){
+				String sI = String.valueOf(i);
+				buffer.append("y"+sI+"+");
+			}
+			buffer.deleteCharAt(buffer.length() - 1); // remove "+" in too 
+			buffer.append("="+p+"\n");
+		}	
+		
 		// constraint (1)
 		for (int i = 0 ; i < nbCity ; i ++){
 			for (int j = 0 ; j < nbCity ; j ++){
@@ -71,6 +84,7 @@ public class SimulationExactMethod extends Simulation {
 			buffer.append("=1"+"\n");
 		}
 
+					
 		buffer.append("\nBounds\n");
 		// yi >= 0
 		for (int i = 0 ; i < nbCity ; i ++){
@@ -114,36 +128,61 @@ public class SimulationExactMethod extends Simulation {
 
 		return buffer;
 	}
-	
+
 	@Override
 	public void startSimulation(){
-		pl = new MyGlpk(createPl());
+		pl = new MyGlpk(createP());
 		//pl.printBrutResult();
-		construcResult();
+		System.out.println("resFctObj : "+pl.getResFctObjectif());
+		//printMatrice();
 	}
-	private void construcResult(){
-		float resFctObj = pl.getResFctObjectif();
-		System.out.println("Solution : "+resFctObj);
-		
-		float[] res = pl.getSolutions();		
-		// get yi
-		for (int i = 0 ; i < nbCity ; i++){
-			matriceRes[i][i]= res[i];
-		}
+	
+	@Override
+	protected  void construcResult(){
+		resFctObj = pl.getResFctObjectif();
 
-		int index = nbCity;
-		for (int i = 0 ; i < nbCity; i++){
-			for (int j = 0 ; j < nbCity; j++){
-				if(i!=j){	
-					if(matriceWeight[i][j]!=0){
-						matriceRes[i][j]=res[index];
-						index++;
-					}			
+		float[] res = pl.getSolutions();
+		int size = res.length;
+		if(isUFLP)
+		{ // yi are at start of table 
+			// get yi
+			for (int i = 0 ; i < nbCity ; i++){
+				matriceRes[i][i]= res[i];
+			}
+
+			int index = nbCity;
+			for (int i = 0 ; i < nbCity; i++){
+				for (int j = 0 ; j < nbCity; j++){
+					if(i!=j){	
+						if(matriceWeight[i][j]!=0){
+							matriceRes[i][j]=res[index];
+							index++;
+						}			
+					}
+				}
+			}
+		}else
+		{// yi are at end of table  
+			// get yi
+			int index = nbCity-1;
+			for (int i = size-1 ; i >= (size-nbCity) ; i--){
+				System.out.println(res[i]);
+				matriceRes[index][index]= res[i];
+				index--;
+			}
+
+			index = 0;
+			for (int i = 0 ; i < nbCity; i++){
+				for (int j = 0 ; j < nbCity; j++){
+					if(i!=j){	
+						if(matriceWeight[i][j]!=0){
+							matriceRes[i][j]=res[index];
+							index++;
+						}			
+					}
 				}
 			}
 		}
-		//printMatrice(matriceRes);
-		//printMatrice(matriceWeight);
 	}
 
 }

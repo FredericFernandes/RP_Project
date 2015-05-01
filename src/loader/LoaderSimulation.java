@@ -1,11 +1,13 @@
 package loader;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import simul.Simulation;
 import simul.SimulationArrondiMethod;
 import simul.SimulationExactMethod;
+import simul.SimulationGeneticsMethod;
 
 
 import Core.City;
@@ -19,21 +21,25 @@ public class LoaderSimulation extends LoaderFile {
 	private static float matriceWeight[][];
 	private static int p;
 	private static boolean isUFLP;
+	private static ArrayList<String[]> originalListLines;
 	private static void loadInstance(String path) 
 	{
 		ArrayList<String[]> listLines = loadFile(path);
+		originalListLines= (ArrayList<String[]>) listLines.clone();
 		listLines.remove(listLines.size()-1); // remove -1 in end file
 		int nbCity = Integer.parseInt(listLines.get(0)[0]);
-		
+
 		matriceWeight = new float[nbCity][nbCity];
 		listSimulatedCity = new HashMap < Integer,SimulatedCity>();
 		int mode  = Integer.parseInt(listLines.get(0)[1]);
 		if (mode != -1){
 			// mode  p-median
+			System.out.println("\nIt's a p-median problem. ");
 			p = mode;
 			isUFLP = false;
 		}else{
 			p = -1; // not used in UFLP mode
+			System.out.println("\nIt's a UFLP problem. ");
 			isUFLP = true;
 		}
 		listLines.remove(0); // remove firth line  --> "nbVilles mode "
@@ -55,15 +61,9 @@ public class LoaderSimulation extends LoaderFile {
 			float weight = Float.parseFloat(couts[2]);
 			matriceWeight[id1][id2] = weight;
 		}
-
-		//Storage.getInstance().setListSimulatedCity(listSimulatedCity);
-		//Storage.getInstance().setMatriceWeight(matriceWeight);
-		//Storage.getInstance().setP(p);
-		//Storage.getInstance().setUFLP(isUFLP);
 	}
 
-	private static void loadVilles() 
-	{
+	private static void loadVilles() {
 		String csvFile = "villes_france.csv";
 		ArrayList<String[]> listLines = loadFile(csvFile);	
 		for (String [] ville : listLines){
@@ -79,26 +79,31 @@ public class LoaderSimulation extends LoaderFile {
 
 	}
 
-	public static Simulation createSimulationExactMethod(String path, boolean chowWeight)
-	{			
+	public static Simulation createSimulationExactMethod(String path, boolean chowRoad){			
 		loadVilles();
 		loadInstance(path);
-		Simulation sim = new SimulationExactMethod(listSimulatedCity,matriceWeight,p,isUFLP,chowWeight);
+		Simulation sim = new SimulationExactMethod(listSimulatedCity,matriceWeight,p,isUFLP,chowRoad);
 		assert  sim != null ;
 		//System.out.println("The simulation is successfully created. ");
 		return sim;
 
 	}
-	public static Simulation createSimulationArrondiMethod(String path, boolean chowWeight)
-	{			
+	public static Simulation createSimulationArrondiMethod(String path, boolean chowRoad){			
 		loadVilles();
 		loadInstance(path);
-		Simulation sim = new SimulationArrondiMethod(listSimulatedCity,matriceWeight,p,isUFLP,chowWeight);
+		Simulation sim = new SimulationArrondiMethod(listSimulatedCity,matriceWeight,p,isUFLP,chowRoad);
 		assert  sim != null ;
 		//System.out.println("The simulation is successfully created. ");
 		return sim;
 
 	}
+	public static Simulation createSimulationGeneticsMethod(String path, boolean chowWeight){		
+		loadVilles();
+		loadInstance(path);
+		Simulation sim = new SimulationGeneticsMethod(listSimulatedCity,matriceWeight,p,isUFLP,chowWeight,originalListLines);
+		assert  sim != null ;
+		//System.out.println("The simulation is successfully created. ");
+		return sim;
 
-
+	}
 }
