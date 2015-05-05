@@ -130,7 +130,7 @@ public class MyGlpk
 		}catch(IOException e1){System.err.println("Probleme en ouvrant le fichier in.lp");}
 		/* LANCE GLPSOL EN LIGNE DE COMMANDE */
 
-		String args= "./myGlpsol -o .out --lp .in.lp ";
+		String args= "glpsol -o .out --lp .in.lp ";
 		System.out.println("\t Lancement de MyGlpk");
 		try{
 			// construction de objet pour lancer application externe

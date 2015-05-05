@@ -5,7 +5,6 @@ import javax.swing.JFrame;
 import graphics.MainWindow;
 public class Main {
 
-
 	public static void main(String[] args) {
 		//Create and set up the window.
 		MainWindow frame = new MainWindow("Projet RP");
@@ -14,7 +13,7 @@ public class Main {
 		frame.addComponentsToPane(frame.getContentPane());
 		//Display the window.
 		frame.pack();
-		frame.setSize(510, 170);
+		frame.setSize(500, 150);
 		frame.setResizable(false);
 		frame.setVisible(true);
 	}
