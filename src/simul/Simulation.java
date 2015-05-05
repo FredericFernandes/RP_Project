@@ -1,20 +1,8 @@
 package simul;
 
-import graphics.Window;
+import graphics.GraphWindow;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-
-import javax.swing.JFrame;
-
-import org.graphstream.algorithm.AStar;
-import org.graphstream.graph.Edge;
-import org.graphstream.graph.Node;
-import org.graphstream.graph.Path;
-import org.graphstream.graph.implementations.SingleGraph;
-import org.graphstream.ui.swingViewer.View;
-import org.graphstream.ui.swingViewer.Viewer;
-import org.graphstream.ui.swingViewer.util.Camera;
 
 import Core.SimulatedCity;
 
@@ -30,15 +18,22 @@ public abstract class Simulation {
 	protected boolean isUFLP;
 	protected int nbCity;
 
-	public Simulation(HashMap<Integer, SimulatedCity> listCity , float [][] matrice, int p, boolean isUFLP,boolean chowRoad) {
+	public Simulation(HashMap<Integer, SimulatedCity> listCity , float [][] matrice, int p,boolean chowRoad) {
 		//this.addAttribute("ui.stylesheet","url('stylehsheet.css');");
 		this.listSimulatedCity = listCity;
 		matriceWeight = matrice;
 		nbCity = listCity.size();
 		matriceRes = new float[nbCity][nbCity];
 		this.p = p;
-		this.isUFLP = isUFLP;
 		this.chowRoad = chowRoad;
+		if (p != -1){
+		// mode  p-median
+		System.out.println("\nIt's a p-median problem. ");
+		this.isUFLP = false;
+	}else{
+		System.out.println("\nIt's a UFLP problem. ");
+		this.isUFLP = true;
+	}
 
 
 	}
@@ -50,11 +45,14 @@ public abstract class Simulation {
 	public void showResult(){
 		
 		construcResult();
+		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		System.out.println("Le résultat est : "+resFctObj);
+		System.out.println("Il y a "+nbCenters()+ " centre(s)");
 		showWindow();
 	}
 
 	private void showWindow(){
-		new Window(listSimulatedCity, matriceWeight, chowRoad,matriceRes);
+		new GraphWindow(listSimulatedCity, matriceWeight, chowRoad,matriceRes);
 	}
 
 	protected void printMatrice()
@@ -80,6 +78,14 @@ public abstract class Simulation {
 				System.out.print("-----+");}
 			System.out.print("\n");
 		}
+	}
+	protected int nbCenters(){
+		int nb =0;
+		for (int i = 0 ; i < nbCity ; i++){
+			if(matriceRes[i][i]!=0)
+				nb++;
+		}	
+		return nb;
 	}
 
 }

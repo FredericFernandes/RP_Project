@@ -8,9 +8,9 @@ public class SimulationExactMethod extends Simulation {
 
 	private MyGlpk pl;
 	public SimulationExactMethod(
-			HashMap<Integer, SimulatedCity> listCity,float[][] matrice, int p, boolean isUFLP, boolean chowWeight) 
+			HashMap<Integer, SimulatedCity> listCity,float[][] matrice, int p, boolean chowWeight) 
 	{
-		super(listCity, matrice, p, isUFLP, chowWeight);
+		super(listCity, matrice, p, chowWeight);
 
 	}
 	private  StringBuffer createP()
@@ -131,10 +131,12 @@ public class SimulationExactMethod extends Simulation {
 
 	@Override
 	public void startSimulation(){
+		long debut = System.currentTimeMillis();
 		pl = new MyGlpk(createP());
 		//pl.printBrutResult();
-		System.out.println("resFctObj : "+pl.getResFctObjectif());
+		//System.out.println("resFctObj : "+pl.getResFctObjectif());
 		//printMatrice();
+		System.out.println(System.currentTimeMillis()-debut);
 	}
 	
 	@Override
@@ -166,7 +168,6 @@ public class SimulationExactMethod extends Simulation {
 			// get yi
 			int index = nbCity-1;
 			for (int i = size-1 ; i >= (size-nbCity) ; i--){
-				System.out.println(res[i]);
 				matriceRes[index][index]= res[i];
 				index--;
 			}

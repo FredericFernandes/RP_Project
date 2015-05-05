@@ -10,9 +10,9 @@ public class SimulationArrondiMethod extends Simulation{
 	private MyGlpk pl;
 
 	public SimulationArrondiMethod(
-			HashMap<Integer, SimulatedCity> listCity,float[][] matrice, int p, boolean isUFLP, boolean chowRoad) 
+			HashMap<Integer, SimulatedCity> listCity,float[][] matrice, int p, boolean chowRoad) 
 	{
-		super(listCity, matrice, p, isUFLP, chowRoad);
+		super(listCity, matrice, p, chowRoad);
 
 	}
 

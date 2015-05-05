@@ -3,8 +3,6 @@ package simul;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import loader.LoaderSimulation;
-
 import Core.Couple;
 import Core.Population;
 import Core.SimulatedCity;
@@ -13,12 +11,16 @@ public class SimulationGeneticsMethod extends Simulation {
 
 	private  ArrayList<String[]> listOfLinesForGenetics;
 	private Population pop;
+	private int initialPopSize;
+	private int nbIteration;
 	public SimulationGeneticsMethod(HashMap<Integer, SimulatedCity> listCity,
-			float[][] matrice, int p, boolean isUFLP, 
-			boolean chowRoad,ArrayList<String[]> listOfLines) 
+			float[][] matrice, int p, 
+			boolean chowRoad,ArrayList<String[]> listOfLines, int nbIter, int nbPop) 
 	{
-		super(listCity, matrice, p, isUFLP, chowRoad);
+		super(listCity, matrice, p, chowRoad);
 		this.listOfLinesForGenetics = listOfLines;
+		this.initialPopSize = nbPop;
+		this.nbIteration = nbIter;
 	}
 
 
@@ -26,8 +28,6 @@ public class SimulationGeneticsMethod extends Simulation {
 	public void startSimulation() 
 	{
 		long debut = System.currentTimeMillis();
-		int initialPopSize = 100;
-		int nbIteration = 400;
 
 		//int numOfCities = LoaderSimulation.getNumberOfCities(listOfLinesForGenetics);
 		//int numOfCenters = LoaderSimulation.getNumberOfCenters(listOfLinesForGenetics);
@@ -48,11 +48,9 @@ public class SimulationGeneticsMethod extends Simulation {
 			//			offSprings.printPop();
 			Population mutatedPop = offSprings.randomMutation(0.4);
 			pop = mutatedPop.getSolution();
-			//System.out.println("====== Exiting with a population of " + pop.size()+"========================================");
+			System.out.println("====== Exiting with a population of " + pop.size()+"========================================");
 		}
 		System.out.println(System.currentTimeMillis()-debut);
-
-		System.out.println("resFctObj : "+(float)pop.getResult());
 	}
 
 
